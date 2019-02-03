@@ -1,6 +1,8 @@
 import { typeID } from "./reimbursement_type";
 import { statusID } from "./reimbursement_status";
 import { User } from "./user";
+import { ReimbursementStatus } from "./reimbursement_status";
+import { ReimbursementType } from "./reimbursement_type";
 /**Reimbursement**  
 The Reimbursement model is used to represent a single reimbursement that an employee would submit
 ```javascript*/
@@ -16,7 +18,7 @@ export class Reimbursement {
     status: statusID; // foreign ey -> ReimbursementStatus, not null
     type: typeID; // foreign key -> ReimbursementType
 
-    constructor(reimbursementId, author, amount, dateSubmitted, dateResolved, description, resolver, status, type) {
+    constructor(reimbursementId = 0, author = User, amount = 0, dateSubmitted = 0, dateResolved = 0, description = '', resolver = User, status = 0, type = 0) {
         this.reimbursementId = reimbursementId;
         this.author = author;
         this.amount = amount;

@@ -1,19 +1,8 @@
 {
   "name": "project0-ers-api-tucker28",
   "version": "1.0.0",
-  "description": "Expense Reimbursement System",
-  "main": "index.js",
-  "dependencies": {
-    "body-parser": "^1.18.3",
-    "express": "^4.16.4"
-  },
-  "devDependencies": {
-    "@types/express": "^4.16.1",
-    "@types/express-session": "^1.15.11",
-    "@types/pg": "^7.4.11",
-    "ts-node": "^8.0.2",
-    "typescript": "^3.3.1"
-  },
+  "description": "ERS Project",
+  "main": "index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon --exec ts-node src/index.ts",
@@ -22,12 +11,27 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/1901-blake/project0-ers-api-Tucker28.git"
+    "url": "git+https://github.com/Tucker28/project0-ers-api-Tucker28.git"
   },
   "author": "Scott Tucker",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/1901-blake/project0-ers-api-Tucker28/issues"
+    "url": "https://github.com/Tucker28/project0-ers-api-Tucker28/issues"
   },
-  "homepage": "https://github.com/1901-blake/project0-ers-api-Tucker28#readme"
+  "homepage": "https://github.com/Tucker28/project0-ers-api-Tucker28#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "express-session": "^1.15.6",
+    "pg": "^7.8.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.16.1",
+    "@types/express-session": "^1.15.11",
+    "@types/pg": "^7.4.11",
+    "nodemon": "^1.18.9",
+    "ts-node": "^8.0.2",
+    "tslint": "^5.12.1",
+    "typescript": "^3.3.1"
+  }
 }
