@@ -1,38 +1,65 @@
 import express from 'express';
 import { rootDir } from '..';
 import * as UserDao from '../dao/user.dao';
-import { authMiddleware } from '../middleware/auth.middleware';
-//import { resolvePtr } from 'dns';
+import { authAdmin } from '../middleware/auth.middleware';
 
 export const authRouter = express.Router();
 
-authRouter.post('/signin', (req, res) => {
-    if (req.body.username === 'blake' && req.body.password === 'password') {
-      console.log('entered function: blake');
-      const user = {
-        username: req.body.username,
-        role: 'admin'
-      };
-      req.session.user = user;
-      res.json(user);
-    } else if (req.body.username === 'hank' && req.body.password === 'password') {
-      console.log('entered function: hank');
-      const user = {
-        username: req.body.username,
-        role: 'associate'
-      };
-      req.session.user = user;
-      res.json(user);
-    } else {
-      console.log('entered function: no user');
-      console.log(`${req.body.username} and ${req.body.password}`);
-      console.log(req.body);
-      res.sendFile(`${rootDir}/public/signin.html`);
-      res.sendStatus(401);
+authRouter.post('/signin', async (req, res) => {
+  console.log('Authorization attempt from Single user function using username');
+  const potentialUser = req.body.username;
+  const password = req.body.password;
+  try {
+    const checkUser = await UserDao.authUser(potentialUser, password);
+    if (checkUser === undefined) {
+      //console.log(checkUser);
+      res.status(400).json({message: 'Invalid Credentials. Agents are enroute to your location.'});
     }
+    const role = +checkUser.role.toString();
+    switch (role) {
+      case 1:
+      case 2:
+        const admin = {
+          username: req.body.username,
+          role: 'admin'
+        };
+        req.session.user = admin;
+        res.json('Authenticated');
+        break;
+      case 3:
+      case 4:
+      const moff = {
+        username: req.body.username,
+        role: 'financeManager'
+      };
+      req.session.user = moff;
+      res.json('Authenticated');
+        break;      
+      case 5:
+      case 6:
+      case 7:
+      const officer = {
+        username: req.body.username,
+        role: 'officer'
+      };
+      req.session.user = officer;
+      res.json('Authenticated');
+        break;
+      case 8:
+        res.status(401).json({ message: 'Stormtroopers do not get reimbursements.  Get back to work!'});
+        break;
+      default:
+        console.log('NO ACCESS');
+        res.status(400).json({message: 'Invalid Credentials. Agents are enroute to your location.'});
+        break;
+    }
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
 });
 
-authRouter.use('', [authMiddleware, (req: express.Request, res: express.Response) => {
+authRouter.use('', [authAdmin, (req: express.Request, res: express.Response) => {
   console.log(`User was logged in and didn't redirect to the signin page`);
   res.sendStatus(201);
 }]);

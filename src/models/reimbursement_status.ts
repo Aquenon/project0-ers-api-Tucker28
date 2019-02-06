@@ -3,11 +3,11 @@ The ReimbursementStatus model is used to track the status of reimbursements. Sta
 ```javascript*/
 
 export class ReimbursementStatus {
-    statusId: number; // primary key
+    statusID: number; // primary key
     status: string; // not null, unique
 
-    constructor (statusId = 0, status = '') {
-        this.statusId = statusId;
+    constructor (statusID = 0, status = '') {
+        this.statusID = statusID;
         this.status = status;
     }
 }

@@ -1,22 +1,71 @@
 import express from 'express';
+import * as ReimbursementDao from '../dao/reimbursement.dao';
+import { auth$Mgr, authRole } from '../middleware/auth.middleware';
 
 export const reimbursementRouter = express.Router();
 
-reimbursementRouter.get('', function (req, res) {
-    res.send('Got a GET request at /reimbursement')
-})
+// /reimbursement - by status
+// reimbursementRouter.get('', [auth$Mgr, async (req: express.Request, res: express.Response) => {
+//     console.log('All reimbursements function from reimbursementRouter');
+//     try {
+//       const reimbursements = await ReimbursementDao.findByStatusID();
+//       res.json(reimbursements);
+//     } catch (err) {
+//       res.sendStatus(500);
+//     }
+//   }]);
 
-reimbursementRouter.post('', function (req, res) {
-    res.send('Got a POST request at /reimbursement')
-})
+// /reimbursement/status/:id - find $ by statusID
+reimbursementRouter.get('/status/:id', [auth$Mgr, async (req: express.Request, res: express.Response) => {
+      console.log('Reimbursement by statusID function from reimbursementRouter');
+      console.log(req.params);
+      const idParam = +req.params.id;
+      console.log(idParam);
+      // +'1' - will convert to number
+      try {
+        const reimbursement = await ReimbursementDao.find$ByStatusID(idParam);
+        res.json(reimbursement);
+      } catch (err) {
+        console.log(err);
+        res.sendStatus(500);
+      }
+    }]);
 
-reimbursementRouter.put('', function (req, res) {
-    res.send('Got a PUT request at /reimbursement')
-})
+// /reimbursement/author/userId/:userId - find $ by userID (Author)
+reimbursementRouter.get('/author/user/:id', [auth$Mgr, async (req: express.Request, res: express.Response) => {
+    //userRouter.get('/:id', async (req, res) => {
+      console.log('Reimbursement by userID function from reimbursementRouter');
+      console.log(req.params);
+      const idParam = +req.params.id;
+      console.log(idParam);
+      // +'1' - will convert to number
+      try {
+        const reimbursement = await ReimbursementDao.find$ByUserID(idParam);
+        res.json(reimbursement);
+      } catch (err) {
+        console.log(err);
+        res.sendStatus(500);
+      }
+    }]);
 
-reimbursementRouter.patch('', function (req, res) {
-    res.send('Got a PATCH request at /reimbursement')
-})
-reimbursementRouter.delete('', function (req, res) {
-    res.send('Got a DELETE request at /reimbursement')
-})
+// /reimbursements - submit new reimbursement
+reimbursementRouter.post('', [authRole, async (req: express.Request, res: express.Response) => {
+  try {
+      const reimbursement = await ReimbursementDao.submitReimbursement(req.body);
+      res.status(201).json(reimbursement);
+  } catch (err) {
+      console.log(err);
+      res.sendStatus(500);
+  }
+}]);
+
+// /reimbursements - update reimbursement
+reimbursementRouter.patch('', [auth$Mgr, async (req: express.Request, res: express.Response) => {
+    try {
+        const reimbursement = await ReimbursementDao.updateReimbursement(req.body);
+        res.json(reimbursement);
+    } catch (err) {
+        console.log(err);
+        res.sendStatus(500);
+    }
+}]);

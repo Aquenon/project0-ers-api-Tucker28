@@ -12,7 +12,8 @@ export class User {
 	email: string; // not null
     role: Role; // not null
     
-    constructor(userId = 0, username = '', password = '', firstName = '', lastName = '', email = '', role = Role) {
+    constructor(userId = 0, username = '', password = '', firstName = '', lastName = '',
+    email = '', role: Role = undefined) {
         this.userId = userId;
         this.username = username;
         this.password = password;
