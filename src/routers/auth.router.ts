@@ -1,6 +1,7 @@
 import express from 'express';
 import { rootDir } from '..';
-import * as UserDao from '../dao/user.dao';
+//import * as UserDao from '../dao/user.dao';
+import { authUser } from '../dao/auth.dao'
 import { authAdmin } from '../middleware/auth.middleware';
 
 export const authRouter = express.Router();
@@ -10,16 +11,25 @@ authRouter.post('/signin', async (req, res) => {
   const potentialUser = req.body.username;
   const password = req.body.password;
   try {
-    const checkUser = await UserDao.authUser(potentialUser, password);
+    const checkUser = await authUser(potentialUser, password);
     if (checkUser === undefined) {
       //console.log(checkUser);
       res.status(400).json({message: 'Invalid Credentials. Agents are enroute to your location.'});
     }
     const role = +checkUser.role.toString();
+    console.log(`This is the information in checkUser: ${checkUser}`);
+    console.log(checkUser.userId);
+    console.log(checkUser.username);
+    console.log(checkUser.password);
+    console.log(checkUser.firstName);
+    console.log(checkUser.lastName);
+    console.log(checkUser.email);
+    console.log(checkUser.role);
     switch (role) {
       case 1:
       case 2:
         const admin = {
+          userID: checkUser.userId,
           username: req.body.username,
           role: 'admin'
         };
@@ -29,6 +39,7 @@ authRouter.post('/signin', async (req, res) => {
       case 3:
       case 4:
       const moff = {
+        userID: checkUser.userId,
         username: req.body.username,
         role: 'financeManager'
       };
@@ -39,6 +50,7 @@ authRouter.post('/signin', async (req, res) => {
       case 6:
       case 7:
       const officer = {
+        userID: checkUser.userId,
         username: req.body.username,
         role: 'officer'
       };
